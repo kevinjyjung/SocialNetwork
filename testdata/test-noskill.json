@@ -1,0 +1,6 @@
+{"user": 0, "friends": [1, 2, 3]}
+{"user": 1, "friends": [0, 2, 3, 5]}
+{"user": 2, "friends": [0, 1, 4]}
+{"user": 3, "friends": [0, 1, 4]}
+{"user": 4, "friends": [2, 3, 5]}
+{"user": 5, "friends": [1, 4]}

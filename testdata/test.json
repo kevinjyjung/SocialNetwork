@@ -1,0 +1,10 @@
+{"user": 1, "friends": [2, 3], "skill": 1}
+{"user": 2, "friends": [1, 4], "skill": 2}
+{"user": 3, "friends": [1, 5, 6, 7], "skill": 3}
+{"user": 4, "friends": [2, 6], "skill": 4}
+{"user": 5, "friends": [3, 8], "skill": 5}
+{"user": 6, "friends": [3, 4, 9], "skill": 6}
+{"user": 7, "friends": [3, 9], "skill": 7}
+{"user": 8, "friends": [5, 9], "skill": 8}
+{"user": 9, "friends": [6, 7, 8], "skill": 9}
+{"user": 10, "friends": [], "skill": 999999}
