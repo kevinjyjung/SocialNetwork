@@ -15,26 +15,23 @@ public class App {
 	 * @param args First argument is the path to JSON Lines file containing network info
 	 */
     public static void main(String[] args) {
-    	// Validate arguments
-    	if (args.length < 1) {
-    		System.err.println("You must provide the JSON Lines file to read.");
-    		return;
-    	}
-    	String fileName = args[0];
+    	// JSON Lines file input
+    	Scanner in = new Scanner(System.in);
+    	System.out.println("\nPath to JSON Lines file:");
+    	String fileName = in.next();
     	
     	// Create network
     	System.out.println("Creating network...");
     	Network network = Network.create(fileName);
     	if (network == null) {
     		System.err.println("Could not create network.");
+    		in.close();
     		return;
     	}
-    	System.out.print("Network created. Users to connect:\n>> ");
-    	Scanner in = new Scanner(System.in);
+    	System.out.println("Network created. Users to connect:");
     	while (in.hasNext()) {
     		try {
     			// Read input
-    			
     			int user1 = in.nextInt();
     			int user2 = in.nextInt();
     			
@@ -46,7 +43,13 @@ public class App {
     	    	System.out.println(result.toString());
     	    	
     	    	// Next prompt
-    	    	System.out.print("Users to connect:\n>> ");
+    	    	System.out.println("Run again with new users?[y/N]");
+    	    	String again = in.next();
+    	    	if (again.equals("y") || again.equals("Y")) {
+    	    		System.out.println("Users to connect:");
+    	    	} else {
+    	    		break;
+    	    	}
     		} catch (InputMismatchException e) {
     			System.out.print("Invalid input. Please try again with integer user ID values.\n>> ");
     			in.nextLine();
