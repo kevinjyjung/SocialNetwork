@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.PriorityQueue;
 
 import com.google.gson.Gson;
@@ -82,10 +81,8 @@ public class Network {
 		
 		// Initialise data structures
 		HashMap<Integer,Integer> pathsFrom = new HashMap<Integer,Integer>();
-		HashSet<Integer> unsettled = new HashSet<Integer>();
 		PriorityQueue<Node> unsettledPQ = 
 				new PriorityQueue<Node>(networkMap.size()/2, new NodeDistanceComparator());
-		HashSet<Integer> settled = new HashSet<Integer>();
 		
 		// Endpoint nodes
 		Node user1Node = networkMap.get(user1);
@@ -113,21 +110,13 @@ public class Network {
 		networkMap.put(user2, new TargetNode(user2Node));
 		
 		// Add user1 to unsettled nodes
-		unsettled.add(user1);
 		unsettledPQ.add(networkMap.get(user1));
 		
 		// Main loop
-		while (!unsettled.isEmpty()) {
+		while (!unsettledPQ.isEmpty()) {
 			// Remove head
 			Node node = unsettledPQ.remove();
 			int user = node.getUser();
-			unsettled.remove(user);
-			settled.add(user);
-			
-			// Display progress
-			if (settled.size() % 10000 == 0) {
-				System.out.println("Number of settled nodes: " + Integer.toString(settled.size()));
-			}
 			
 			// Check if target is reached
 			if (user == user2) {
@@ -138,26 +127,13 @@ public class Network {
 			
 			// Iterate through friends
 			for (int friend: node.getFriends()) {
-				// Check if already settled
-				if (!settled.contains(friend)) {
-					Node friendNode = networkMap.get(friend);
-					double newFriendDist = node.dist + friendNode.getWeight();
-					// Update distance if path is shorter
-					if (unsettled.contains(friend)) {
-						if (friendNode.dist > newFriendDist) {
-							// Remove and add to reorder priority queue
-							unsettledPQ.remove(friendNode);
-							friendNode.dist = newFriendDist;
-							unsettledPQ.add(friendNode);
-							pathsFrom.put(friend, user);
-						}
-					// If new, then add to unsettled nodes
-					} else {
-						friendNode.dist = newFriendDist;
-						unsettledPQ.add(friendNode);
-						unsettled.add(friend);
-						pathsFrom.put(friend, user);
-					}
+				Node friendNode = networkMap.get(friend);
+				// Check if already discovered
+				if (friendNode.dist == Double.MAX_VALUE) {
+					// Update distance and add to unsettled
+					friendNode.dist = node.dist + friendNode.getWeight();
+					unsettledPQ.add(friendNode);
+					pathsFrom.put(friend, user);
 				}
 			}
 		}
