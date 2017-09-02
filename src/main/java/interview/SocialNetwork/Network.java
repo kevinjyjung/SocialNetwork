@@ -106,9 +106,6 @@ public class Network {
 		// Set initial distance to zero
 		networkMap.get(user1).dist = 0;
 		
-		// Replace user2 node with target node which has weight = 0
-		networkMap.put(user2, new TargetNode(user2Node));
-		
 		// Add user1 to unsettled nodes
 		unsettledPQ.add(networkMap.get(user1));
 		
@@ -118,13 +115,6 @@ public class Network {
 			Node node = unsettledPQ.remove();
 			int user = node.getUser();
 			
-			// Check if target is reached
-			if (user == user2) {
-				user2Node.dist = node.dist + user2Node.getWeight();
-				networkMap.put(user2, user2Node);
-				return new Result(user2, networkMap, pathsFrom, user2Node.dist);
-			}
-			
 			// Iterate through friends
 			for (int friend: node.getFriends()) {
 				Node friendNode = networkMap.get(friend);
@@ -132,12 +122,15 @@ public class Network {
 				if (friendNode.dist == Double.MAX_VALUE) {
 					// Update distance and add to unsettled
 					friendNode.dist = node.dist + friendNode.getWeight();
-					unsettledPQ.add(friendNode);
 					pathsFrom.put(friend, user);
+					// Check if target is reached
+					if (friend == user2) {
+						return new Result(user2, networkMap, pathsFrom, friendNode.dist);
+					}
+					unsettledPQ.add(friendNode);
 				}
 			}
 		}
-		networkMap.put(user2, user2Node);
 		return new Result(Status.FAIL_NO_PATH);
 	}
 	
