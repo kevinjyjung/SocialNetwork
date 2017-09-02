@@ -81,7 +81,7 @@ public class Network {
 		
 		// Initialise data structures
 		HashMap<Integer,Integer> pathsFrom = new HashMap<Integer,Integer>();
-		PriorityQueue<Node> unsettledPQ = 
+		PriorityQueue<Node> unsettled = 
 				new PriorityQueue<Node>(networkMap.size()/2, new NodeDistanceComparator());
 		
 		// Endpoint nodes
@@ -107,12 +107,12 @@ public class Network {
 		networkMap.get(user1).dist = 0;
 		
 		// Add user1 to unsettled nodes
-		unsettledPQ.add(networkMap.get(user1));
+		unsettled.add(networkMap.get(user1));
 		
 		// Main loop
-		while (!unsettledPQ.isEmpty()) {
+		while (!unsettled.isEmpty()) {
 			// Remove head
-			Node node = unsettledPQ.remove();
+			Node node = unsettled.remove();
 			int user = node.getUser();
 			
 			// Iterate through friends
@@ -127,7 +127,7 @@ public class Network {
 					if (friend == user2) {
 						return new Result(user2, networkMap, pathsFrom, friendNode.dist);
 					}
-					unsettledPQ.add(friendNode);
+					unsettled.add(friendNode);
 				}
 			}
 		}
