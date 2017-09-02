@@ -38,7 +38,8 @@ public class Network {
 			try {
 				while ((currentLine = reader.readLine()) != null) {
 					Gson gson = new GsonBuilder().create();
-					Node node = gson.fromJson(currentLine, Node.class);
+					Node node = NodeValidator.validate(
+							gson.fromJson(currentLine, NodeValidator.class));
 					networkMap.put(node.getUser(), node);
 				}
 			} catch (JsonSyntaxException e) {
@@ -82,7 +83,8 @@ public class Network {
 		// Initialise data structures
 		HashMap<Integer,Integer> pathsFrom = new HashMap<Integer,Integer>();
 		HashSet<Integer> unsettled = new HashSet<Integer>();
-		PriorityQueue<Node> unsettledPQ = new PriorityQueue<Node>(networkMap.size()/2, new NodeDistanceComparator());
+		PriorityQueue<Node> unsettledPQ = 
+				new PriorityQueue<Node>(networkMap.size()/2, new NodeDistanceComparator());
 		HashSet<Integer> settled = new HashSet<Integer>();
 		
 		// Endpoint nodes

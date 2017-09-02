@@ -20,6 +20,12 @@ public class Node {
 		this.friends = new ArrayList<Integer>();
 	}
 	
+	public Node(NodeValidator node) {
+		this.user = node.user;
+		this.skill = node.skill;
+		this.friends = node.friends;
+	}
+	
 	public int getUser() {
 		return this.user;
 	}

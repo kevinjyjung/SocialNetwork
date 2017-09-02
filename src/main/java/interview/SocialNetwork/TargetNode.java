@@ -16,6 +16,11 @@ public class TargetNode extends Node {
 		addFriends(node.getFriends());
 	}
 	
+	/**
+	 * Weight of target node is set to zero since all edges coming in
+	 * to the target node have the same weight, it shouldn't affect
+	 * the final path obtained from running the algorithm
+	 */
 	@Override
 	public double getWeight() {
 		return 0;
